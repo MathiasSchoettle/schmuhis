@@ -1,6 +1,7 @@
 CC := g++
 CFLAGS := -Wall -Wextra -std=c++17
 LDFLAGS := -lstdc++
+CLIB = -I./lib/portaudio/include ./lib/portaudio/lib/.libs/libportaudio.a -lrt -lasound -ljack -pthread
 
 SRCDIR := src
 SOURCES := $(wildcard $(SRCDIR)/*.cpp)
@@ -9,7 +10,7 @@ OBJECTS := $(SOURCES:.cpp=.o)
 TARGET := app
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS) $(CLIB)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
