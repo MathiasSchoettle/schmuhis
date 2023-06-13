@@ -1,6 +1,6 @@
 CC := g++
-CFLAGS := -Wall -Wextra -std=c++17
-LDFLAGS := -lstdc++
+CFLAGS := -Wall -std=c++17
+LDFLAGS := -lstdc++ -lglfw -lGL -lGLEW
 CLIB = -I./lib/portaudio/include ./lib/portaudio/lib/.libs/libportaudio.a -lrt -lasound -ljack -pthread
 
 SRCDIR := src
