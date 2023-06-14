@@ -11,6 +11,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 int main() {
+	
 	if (!glfwInit()) {
 		std::cerr << "Failed to initialize GLFW" << std::endl;
 		return 1;
@@ -24,6 +25,8 @@ int main() {
 		return 1;
 	}
 
+	glfwMakeContextCurrent(window);
+
 	GLenum err = glewInit();
 	if (err != GLEW_OK) {
 		std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
@@ -31,7 +34,6 @@ int main() {
 		return 1;
 	}
 
-	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, key_callback);
 
 	while (!glfwWindowShouldClose(window)) {
