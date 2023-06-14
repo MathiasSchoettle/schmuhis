@@ -4,7 +4,8 @@
 #include <glm/glm.hpp>
 
 #include "gl/shader.h"
-#include "gl/players.h"
+#include "gl/tri.h"
+#include "netcode/NetworkComponent.h"
 
 #define WIDTH 1280
 #define HEIGHT 1280
