@@ -3,7 +3,7 @@ repo for friends to code together &lt;3
 
 
 #Installation of required libs:
- - 'sudo apt install libboost-all-dev'
+ - 'sudo apt install libboost-all-dev libglfw3-dev libglew-dev libglm-dev'
 
 
 schmuhbeck todos:
