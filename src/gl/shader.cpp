@@ -66,6 +66,9 @@ void shader::compile() {
 	GLint success = GL_FALSE;
 	glGetProgramiv(program, GL_LINK_STATUS, &success);
 
+	glDeleteShader(vertex_shader);
+	glDeleteShader(fragment_shader);
+
 	if (success == GL_TRUE) {
 		if (glIsProgram(id)) glDeleteProgram(id);
 		id = program;

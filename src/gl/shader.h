@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 
 class shader {
-	GLuint id;
+	GLuint id = 0;
 	std::string name;
 	std::map<GLenum, std::string> source_files;
 
