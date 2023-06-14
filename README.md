@@ -1,6 +1,11 @@
 # schmuhis
 repo for friends to code together &lt;3
 
+
+#Installation of required libs:
+ - 'sudo apt install libboost-all-dev'
+
+
 schmuhbeck todos:
 - runtime parameter ob server oder client, + ip-adresse von server für client
 - network component klasse ist für netzwerk kommunikation zuständig
