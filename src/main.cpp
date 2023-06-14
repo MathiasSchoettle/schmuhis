@@ -1,16 +1,21 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #include "gl/shader.h"
-#include "gl/tri.h"
+#include "gl/players.h"
 
 #define WIDTH 1280
-#define HEIGHT 720
+#define HEIGHT 1280
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+}
+
+void framebuffer_resize_callback(GLFWwindow *window, int width, int height) {
+	glViewport(0, 0, width, height);
 }
 
 int main() {
@@ -42,16 +47,15 @@ int main() {
 	}
 
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetFramebufferSizeCallback(window, framebuffer_resize_callback);
 
-	tri t;
-	shader test("test shader", "shaders/test.vert", "shaders/test.frag");
-	test.bind();
+	players p(glm::vec3(0.2), glm::vec3(0.6));
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		t.draw();
+		p.draw_players(glm::vec2(1), glm::vec2(2));
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

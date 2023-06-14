@@ -20,6 +20,6 @@ public:
 	void unbind();
 
 	shader(const shader &shader) = delete;
-	shader& operator=(const shader&) = delete;
-	shader& operator=(const shader&&) = delete;
+
+	void uniform(const std::string &name, const glm::mat4 &matrix);
 };
