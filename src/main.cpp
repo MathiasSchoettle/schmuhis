@@ -2,6 +2,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "gl/shader.h"
+
 #define WIDTH 1280
 #define HEIGHT 720
 
@@ -35,6 +37,8 @@ int main() {
 	}
 
 	glfwSetKeyCallback(window, key_callback);
+
+	shader test("test shader", "shaders/test.vert", "shaders/test.frag");
 
 	while (!glfwWindowShouldClose(window)) {
 		glfwSwapBuffers(window);
