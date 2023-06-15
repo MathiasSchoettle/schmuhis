@@ -55,11 +55,23 @@ void players::draw_players(glm::vec2 first_pos, glm::vec2 second_pos) {
 	auto matrix = glm::mat4(1.0f);
 	matrix = glm::scale(matrix, glm::vec3(0.2));
 
+	auto first_matrix = glm::translate(matrix, glm::vec3(first_pos.x, first_pos.y, 0));
+
 	player_shader->bind();
-	player_shader->uniform("transform", matrix);
+	player_shader->uniform("player_color", first_color);
+	player_shader->uniform("transform", first_matrix);
 
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+
+	auto second_matrix = glm::translate(matrix, glm::vec3(second_pos.x, second_pos.y, 0));
+	player_shader->uniform("player_color", second_color);
+	player_shader->uniform("transform", second_matrix);
+
+	glBindVertexArray(vao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
 	player_shader->unbind();
 }

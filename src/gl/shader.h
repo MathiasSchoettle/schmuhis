@@ -21,5 +21,6 @@ public:
 
 	shader(const shader &shader) = delete;
 
+	void uniform(const std::string &name, const glm::vec3 &val);
 	void uniform(const std::string &name, const glm::mat4 &matrix);
 };
