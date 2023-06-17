@@ -55,7 +55,7 @@ void framebuffer_resize_callback(GLFWwindow *window, int width, int height) {
 }
 
 
-void connection_mode_selection(int argc, char* argv[]){
+int connection_mode_selection(int argc, char* argv[]){
 	if(strstr(argv[1], "-m") !=0){
 		if(argc > 2){
 			if((strstr(argv[2], "client") != 0)){
@@ -64,22 +64,23 @@ void connection_mode_selection(int argc, char* argv[]){
 
 					if((strstr(argv[4], "") == 0)){
 						std::cout << "no server ip address provided!" << std::endl;
-						exit(1);
+						return 1;
 					}
 					else
 						std::cout << "trying to connect to following ip address: " << argv[4] << std::endl;
 				}
 				else{
 					std::cout << "no server ip address provided!" << std::endl;
-					exit(1);
+					return 1;
 				}
 			}
 		}
-		else
+		else{
 			std::cout << "running in server mode!" << std::endl;
+			return 1;
+		}
 	}	
-
-
+	return 0;
 }
 int main(int argc, char* argv[]) {
 	
@@ -92,9 +93,11 @@ int main(int argc, char* argv[]) {
     if(strstr(argv[1],"-?") != 0)
 		help();
 	
-	connection_mode_selection(argc, argv);
+	if(!connection_mode_selection(argc, argv)){
+		std::cerr << "Failed to initialize connection!" << std::endl;
+		return 1;
+	}
 	
-
 	if (!glfwInit()) {
 		std::cerr << "Failed to initialize GLFW" << std::endl;
 		return 1;
