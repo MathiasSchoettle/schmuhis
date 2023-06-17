@@ -13,6 +13,19 @@
 auto pos_1 = glm::vec2(0);
 auto pos_2 = glm::vec2(0);
 
+
+static void help()
+{
+    std::cout << "Usage:\n";
+    std::cout << "app [options]" << std::endl; 
+    
+    std::cout << "options:" << std::endl;
+	std::cout << "\t -m , selects connection mode (Server, Client), default is server" << std::endl;
+    std::cout << "\t -ip , enter IP-Address of the server, only possible in client mode" << std::endl;
+    exit(1);
+}
+
+
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
@@ -41,8 +54,47 @@ void framebuffer_resize_callback(GLFWwindow *window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
-int main() {
+
+void connection_mode_selection(int argc, char* argv[]){
+	if(strstr(argv[1], "-m") !=0){
+		if(argc > 2){
+			if((strstr(argv[2], "client") != 0)){
+				std::cout << "client mode selected!" << std::endl;
+				if((argc > 3) && (strstr(argv[3], "-ip") != 0)){
+
+					if((strstr(argv[4], "") == 0)){
+						std::cout << "no server ip address provided!" << std::endl;
+						exit(1);
+					}
+					else
+						std::cout << "trying to connect to following ip address: " << argv[4] << std::endl;
+				}
+				else{
+					std::cout << "no server ip address provided!" << std::endl;
+					exit(1);
+				}
+			}
+		}
+		else
+			std::cout << "running in server mode!" << std::endl;
+	}	
+
+
+}
+int main(int argc, char* argv[]) {
 	
+
+	//---------[ check the arg count ]----------------------------------------
+    if(argc < 2)
+        std::cout << "running in server mode!" << std::endl;
+    if(strstr(argv[1],"-h") != 0)
+        help();
+    if(strstr(argv[1],"-?") != 0)
+		help();
+	
+	connection_mode_selection(argc, argv);
+	
+
 	if (!glfwInit()) {
 		std::cerr << "Failed to initialize GLFW" << std::endl;
 		return 1;
