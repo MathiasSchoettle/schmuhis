@@ -4,6 +4,11 @@
 
 #include "players.h"
 
+#define PLAYER_WIDTH 8
+#define PLAYER_HEIGHT 12
+#define GAME_WIDTH 160
+#define GAME_HEIGHT 90
+
 players::players(glm::vec3 first_color, glm::vec3 second_color) 
 	: first_color(first_color), second_color(second_color) {
 	
@@ -48,16 +53,14 @@ players::~players() {
 }
 
 void players::draw_players(glm::vec2 first_pos, glm::vec2 second_pos) {
-	
-	angle += 1.0f;
-	angle = (int) angle % 360;
 
-	auto matrix = glm::mat4(1.0f);
-	matrix = glm::scale(matrix, glm::vec3(0.2));
-
-	auto first_matrix = glm::translate(matrix, glm::vec3(first_pos.x, first_pos.y, 0));
-
+	auto model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 6, 0));
+	model_matrix = glm::scale(model_matrix, glm::vec3(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2, 1));
+	auto proj = glm::ortho<float>(0, GAME_WIDTH, 0, GAME_HEIGHT);
 	player_shader->bind();
+	player_shader->uniform("proj", proj);
+
+	auto first_matrix = glm::translate(model_matrix, glm::vec3(first_pos.x, first_pos.y, 0));
 	player_shader->uniform("player_color", first_color);
 	player_shader->uniform("transform", first_matrix);
 
@@ -65,7 +68,7 @@ void players::draw_players(glm::vec2 first_pos, glm::vec2 second_pos) {
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	auto second_matrix = glm::translate(matrix, glm::vec3(second_pos.x, second_pos.y, 0));
+	auto second_matrix = glm::translate(model_matrix, glm::vec3(second_pos.x, second_pos.y, 0));
 	player_shader->uniform("player_color", second_color);
 	player_shader->uniform("transform", second_matrix);
 

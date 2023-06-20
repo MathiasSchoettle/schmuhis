@@ -9,7 +9,6 @@ class players {
 	GLuint vbo, vao, ebo;
 	glm::vec3 first_color, second_color;
 	shader *player_shader;
-	float angle = 0.0f;
 
 public:
 	players(glm::vec3 first_color, glm::vec3 second_color);

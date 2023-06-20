@@ -8,10 +8,12 @@
 #include "netcode/network_component.h"
 
 #define WIDTH 1280
-#define HEIGHT 1280
+#define HEIGHT 720
 
-auto pos_1 = glm::vec2(0);
-auto pos_2 = glm::vec2(0);
+auto pos_1 = glm::vec2(30, 0);
+auto pos_2 = glm::vec2(15, 0);
+float velocity_1 = 0;
+float velocity_2 = 0;
 
 
 static void help()
@@ -32,22 +34,40 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 }
 
 void movement(GLFWwindow *window) {
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		pos_1 += glm::vec2(0, 0.1);
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && pos_1.y <= 0)
+		velocity_1 = 0.7;
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && pos_2.y <= 0)
+		velocity_2 = 0.7;
+
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		pos_1 -= glm::vec2(0.1, 0);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		pos_1 -= glm::vec2(0, 0.1);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		pos_1 += glm::vec2(0.1, 0);
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		pos_2 += glm::vec2(0, 0.1);
+
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		pos_2 -= glm::vec2(0.1, 0);
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		pos_2 -= glm::vec2(0, 0.1);
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		pos_2 += glm::vec2(0.1, 0);
+	
+	if (velocity_1 != 0) {
+		pos_1.y += velocity_1;
+		velocity_1 -= 0.025;
+	}
+
+	if (pos_1.y < 0) {
+		pos_1.y = 0;
+		velocity_1 = 0;
+	}
+
+	if (velocity_2 != 0) {
+		pos_2.y += velocity_2;
+		velocity_2 -= 0.025;
+	}
+
+	if (pos_2.y < 0) {
+		pos_2.y = 0;
+		velocity_2 = 0;
+	}
 }
 
 void framebuffer_resize_callback(GLFWwindow *window, int width, int height) {
@@ -127,7 +147,7 @@ int main(int argc, char* argv[]) {
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetFramebufferSizeCallback(window, framebuffer_resize_callback);
 
-	players p(glm::vec3(0.2), glm::vec3(0.6));
+	players p(glm::vec3(0.1, 0.8, 0.2), glm::vec3(0.6, 0.2, 0.7));
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

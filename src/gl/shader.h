@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 #include <map>
 #include <GL/glew.h>
 
@@ -8,6 +9,7 @@ class shader {
 	GLuint id = 0;
 	std::string name;
 	std::map<GLenum, std::string> source_files;
+	std::map<GLenum, size_t> timestamps;
 
 	void compile();
 	GLuint compile_shader(GLenum type);
@@ -18,6 +20,8 @@ public:
 
 	void bind();
 	void unbind();
+
+	void reload();
 
 	shader(const shader &shader) = delete;
 

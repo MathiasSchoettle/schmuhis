@@ -1,6 +1,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <sys/stat.h>
+#include <chrono>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -16,8 +18,19 @@ std::string read_source(const std::string &filepath) {
 	return std::string();
 }
 
+size_t get_timestamp(const std::string &filepath) {
+	std::ifstream in_file(filepath, std::ios::in);
+	if (in_file.is_open()) {
+		struct stat sb;
+		if (stat(filepath.c_str(), &sb) == 0)
+			return sb.st_mtime;
+	}
+	return 0;
+}
+
 GLuint shader::compile_shader(GLenum type) {
 	auto source = read_source(source_files[type]);
+	timestamps[type] = get_timestamp("./" + source_files[type]);
 
 	if (source.empty()) {
 		std::cerr << "Shader source of " << source_files[type] << " is empty" << std::endl;
@@ -39,10 +52,10 @@ GLuint shader::compile_shader(GLenum type) {
 	std::string message = "Error while compiling shader " + name + ":\n";
 	glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &length);
 
-	char *log = (char*) malloc(length);
-	glGetShaderInfoLog(shader_id, length, nullptr, log);
-	message += log;
-	free(log);
+	// char *log = (char*) malloc(length);
+	// glGetShaderInfoLog(shader_id, length, nullptr, log);
+	// message += log;
+	// free(log);
 
 	message += "\nsource:\n" + source;
 	std::cerr << message << std::endl;
@@ -79,10 +92,10 @@ void shader::compile() {
 		std::string message = "Failed linking of " + name + "\n";
 		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
 
-		char *log = (char*) malloc(length);
-		glGetProgramInfoLog(program, length, nullptr, log);
-		message += log;
-		free(log);
+		// char *log = (char*) malloc(length);
+		// glGetProgramInfoLog(program, length, nullptr, log);
+		// message += log;
+		// free(log);
 
 		glDeleteProgram(program);
 
@@ -102,11 +115,22 @@ shader::~shader() {
 }
 
 void shader::bind() {
+	reload();
 	glUseProgram(id);
 }
 
 void shader::unbind() {
 	glUseProgram(0);
+}
+
+void shader::reload() {
+	for (auto [type,file] : source_files) {
+		if (get_timestamp(file) != timestamps[type]) {
+			std::cout << "Recompiling " << file << std::endl;
+			compile();
+			return;
+		}
+	}
 }
 
 void shader::uniform(const std::string &name, const glm::vec3 &val) {
